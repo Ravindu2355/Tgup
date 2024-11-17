@@ -1,9 +1,14 @@
 from telethon import TelegramClient, events
-from ethon.telethon import fast_upload
+from telethon.tl.types import DocumentAttributeVideo
+from moviepy.editor import VideoFileClip
+from ethon.telefunc import fast_upload
+from ethon.pyfunc import video_metadata
 import requests
-import os
+import os, time
 import math
 import subprocess
+from PIL import Image
+
 
 # Replace these with your own values
 API_ID = os.getenv('apiid')
@@ -55,28 +60,52 @@ async def upload_from_url(event):
         await reply_msg.edit("Download complete. Generating thumbnail...")
 
         # Generate thumbnail
-        thumbnail_path = generate_thumbnail(filename)
+        #thumbnail_path = generate_thumbnail(filename)
         
         await reply_msg.edit("Thumbnail generated. Uploading to Telegram...")
 
         # Upload the file to Telegram using fast_upload
-        uploaded_file = await fast_upload(bot, filename)
+        #uploaded_file = await fast_upload(bot, filename)
 
         # Send the uploaded file with the thumbnail
-        await bot.send_file(
-            event.chat_id,
-            uploaded_file,
-            caption=f'Uploaded: {filename}',
-            thumb=thumbnail_path,
-            supports_streaming=True  # This makes the video streamable
-        )
+        #await bot.send_file(
+           #event.chat_id,
+           # uploaded_file,
+           #  caption=f'Uploaded: {filename}',
+           #   thumb=thumbnail_path,
+           #  supports_streaming=True  # This makes the video streamable
+        #)
         
         # Clean up the local file and thumbnail after uploading
-        os.remove(filename)
-        if thumbnail_path and os.path.exists(thumbnail_path):
-            os.remove(thumbnail_path)
+        #os.remove(filename)
+        #if thumbnail_path and os.path.exists(thumbnail_path):
+            #os.remove(thumbnail_path)
 
-        await reply_msg.edit("Upload complete!")
+        try:
+        #jpg = await gen_thumb(out)
+          thumb_path='thumb.jpg'
+          with VideoFileClip(file_name) as video:
+              frame = video.get_frame(3.0)
+              img = Image.fromarray(frame)
+              img.save(thumb_path, "JPEG")
+          metadata = video_metadata(out)
+          width = metadata["width"]
+          height = metadata["height"]
+          duration = metadata["duration"]
+          attributes = [DocumentAttributeVideo(duration=duration, w=width, h=height, supports_streaming=True)]           
+          UT = time.time()
+          uploader = await fast_upload(f'{file_name}', f'{file_name}', UT, bot, reply_msg, '**UPLOADING:**')
+          await bot.send_file(event.chat_id, uploader,thumb=thumb_path, caption="**RvX**", attributes=attributes, force_document=False)
+          if os.path.exists(thumb_path):
+             os.remove(thumb_path)
+        except Exception as e:
+          print(e)
+          return await reply_msg.edit(f"An error occured while uploading!\n\n{e}")
+        #await edit.delete()
+        os.remove(file_name)
+
+        
+    await reply_msg.edit("Upload complete!")
 
     except Exception as e:
         await event.reply(f"An error occurred: {str(e)}")
