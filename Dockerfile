@@ -9,7 +9,7 @@ COPY . .
 
 # Install ffmpeg
 #RUN apt-get update && apt-get install -y ffmpeg && apt-get clean
-RUN apt -qq update && apt -qq install -y git python3 python3-pip ffmpeg
+#RUN apt -qq update && apt -qq install -y git python3 python3-pip ffmpeg
 
 # Install Python dependencies
 COPY requirements.txt .
