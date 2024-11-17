@@ -6,7 +6,7 @@ from ethon.pyfunc import video_metadata
 import requests
 import os, time
 import math
-import subprocess
+#import subprocess
 from PIL import Image
 
 
@@ -24,10 +24,10 @@ def progress_bar(completed, total, length=20):
     return '[' + '=' * progress + ' ' * (length - progress) + ']'
 
 # Function to generate a thumbnail from the video
-def generate_thumbnail(video_path, thumbnail_path='thumb.jpg'):
-    command = f'ffmpeg -i "{video_path}" -ss 00:00:01.000 -vframes 1 "{thumbnail_path}" -y'
-    subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    return thumbnail_path if os.path.exists(thumbnail_path) else None
+#def generate_thumbnail(video_path, thumbnail_path='thumb.jpg'):
+    #command = f'ffmpeg -i "{video_path}" -ss 00:00:01.000 -vframes 1 "{thumbnail_path}" -y'
+    #subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    #return thumbnail_path if os.path.exists(thumbnail_path) else None
 
 @bot.on(events.NewMessage(pattern='/upload'))
 async def upload_from_url(event):
