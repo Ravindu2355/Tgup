@@ -16,7 +16,7 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Expose the port the app runs on (not strictly necessary for a Telegram bot)
-EXPOSE 8000
+#EXPOSE 8000
 
 # Run the bot when the container launches
 CMD gunicorn app:app & python3 bot.py
