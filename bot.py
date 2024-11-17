@@ -103,10 +103,7 @@ async def upload_from_url(event):
           return await reply_msg.edit(f"An error occured while uploading!\n\n{e}")
         #await edit.delete()
         os.remove(file_name)
-
-        
-    await reply_msg.edit("Upload complete!")
-
+        await reply_msg.edit("Upload complete!")
     except Exception as e:
         await event.reply(f"An error occurred: {str(e)}")
 
