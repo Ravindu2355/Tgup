@@ -89,7 +89,7 @@ async def upload_from_url(event):
               img = Image.fromarray(frame)
               img.save(thumb_path, "JPEG")
           await reply_msg.edit("Thumbnail generated. Uploading to Telegram...")
-          metadata = video_metadata(out)
+          metadata = video_metadata(filename)
           width = metadata["width"]
           height = metadata["height"]
           duration = metadata["duration"]
